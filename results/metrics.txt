@@ -2,9 +2,14 @@ SVM Cat vs Dog Image Classification
 =========================
 
 Testing Samples:1600
-Image Size: 32x32
+Image Size: 64x64
 Image Type: Grayscale
-Features: 1024
+Features: HOG
+HOG Orientations:9
+Pixels Per cell:(8,8)
+Cells Per Block: (2,2)
+Block Normalization: L2-Hys
+Feature Count:1764
 Kernel: RBF
 C: 10
 Gamma: scale

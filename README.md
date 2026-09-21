@@ -1,47 +1,69 @@
 # Cat vs Dog Image Classification using SVM
 
-## Project Overview
+## 📌 Project Overview
 
-This project implements a **Support Vector Machine (SVM)** based image classification system to classify images into two categories:
+This project implements a **Support Vector Machine (SVM)** to classify images into two categories:
 
-* Cat
-* Dog
+* 🐱 Cat
+* 🐶 Dog
 
-The project uses image preprocessing and **Histogram of Oriented Gradients (HOG)** feature extraction before training an SVM classifier.
+The project was developed as part of the **Machine Learning Internship at Prodigy Infotech**.
 
-The objective is to build a traditional machine-learning computer vision pipeline for binary image classification.
-
----
-
-## Problem Statement
-
-Implement a Support Vector Machine (SVM) to classify images of cats and dogs.
-
-The system takes an image as input, extracts relevant visual features, and predicts whether the image belongs to the **Cat** or **Dog** class.
+Instead of using raw image pixels directly, the project uses **Histogram of Oriented Gradients (HOG)** for feature extraction. These features are then used to train an **RBF-kernel Support Vector Machine**.
 
 ---
 
-## Dataset
+## 🎯 Problem Statement
 
-The project uses the **Kaggle Cats and Dogs** image dataset.
+Build a machine learning model using Support Vector Machines to classify images of cats and dogs.
 
-The dataset contains two classes:
+The system performs the following steps:
+
+1. Load cat and dog images.
+2. Convert images to grayscale.
+3. Resize images to 64 × 64 pixels.
+4. Normalize pixel values.
+5. Extract HOG features.
+6. Split the data into training and testing sets.
+7. Train an SVM classifier.
+8. Tune the SVM hyperparameter `C`.
+9. Evaluate the trained model.
+10. Predict the class of new images.
+
+---
+
+## 📂 Dataset
+
+The project uses the **Microsoft Kaggle Cats and Dogs dataset**, which contains images of cats and dogs.
+
+Dataset source:
+
+**Microsoft — Kaggle Cats and Dogs Dataset**
+
+The extracted dataset is organized as:
 
 ```text
-PetImages/
-├── Cat/
-└── Dog/
+data/
+└── PetImages/
+    ├── Cat/
+    └── Dog/
 ```
 
-Approximately 25,000 images are available in the dataset.
+The dataset contains approximately **25,000 images**.
 
-For the initial model development and experimentation, a subset of **8,000 images** is used.
+During preprocessing, invalid or corrupted images are skipped automatically.
+
+The preprocessing pipeline successfully loaded:
+
+```text
+Total valid images: 24,998
+```
 
 ---
 
-## Technologies Used
+## 🛠️ Technologies Used
 
-* Python
+* Python 3.11
 * NumPy
 * Pandas
 * Scikit-learn
@@ -51,52 +73,47 @@ For the initial model development and experimentation, a subset of **8,000 image
 * Seaborn
 * Joblib
 * Jupyter Notebook
+* Git & GitHub
 
 ---
 
-## Machine Learning Pipeline
+## 🧠 Machine Learning Approach
+
+The project uses the following pipeline:
 
 ```text
-Input Images
-     ↓
-Image Loading
+Input Image
      ↓
 Grayscale Conversion
      ↓
-Image Resizing
+Resize to 64 × 64
+     ↓
+Pixel Normalization
      ↓
 HOG Feature Extraction
      ↓
-Train-Test Split
-     ↓
-SVM Training
-     ↓
-Hyperparameter Tuning
-     ↓
-Model Evaluation
+SVM Classifier
      ↓
 Cat / Dog Prediction
 ```
 
 ---
 
-## Image Preprocessing
+## 🔍 Image Preprocessing
 
-Each image is processed using the following steps:
+Each image is processed using the following steps.
 
 ### 1. Grayscale Conversion
 
-Images are converted from RGB to grayscale.
+Color images are converted into grayscale to reduce the dimensionality of the input.
 
 ### 2. Image Resizing
 
-Images are resized to:
+Every image is resized to:
 
 ```text
 64 × 64 pixels
 ```
-
-This provides a consistent input size.
 
 ### 3. Pixel Normalization
 
@@ -108,60 +125,63 @@ Pixel values are normalized to the range:
 
 ### 4. HOG Feature Extraction
 
-Histogram of Oriented Gradients (HOG) features are extracted to represent image edges and local shape information.
+Histogram of Oriented Gradients is used to capture important image structure and edge information.
 
-The HOG configuration used is:
+The HOG configuration is:
 
 ```text
-Orientations: 9
-Pixels per cell: 8 × 8
-Cells per block: 2 × 2
-Block normalization: L2-Hys
+Orientations       : 9
+Pixels per Cell    : (8, 8)
+Cells per Block    : (2, 2)
+Block Normalization: L2-Hys
+```
+
+Each processed image produces:
+
+```text
+1,764 HOG features
 ```
 
 ---
 
-## SVM Model
+## 🤖 SVM Model
 
-The classifier uses the Support Vector Machine implementation from Scikit-learn.
+The classifier used in this project is:
 
-Model configuration:
+**Support Vector Classifier (SVC)** from Scikit-learn.
+
+The final configuration is:
 
 ```text
-Algorithm: Support Vector Machine
-Kernel: RBF
-C: 10
-Gamma: scale
+Kernel : RBF
+C      : 10
+Gamma  : scale
 ```
 
-The value of `C` can be updated based on the result of the hyperparameter tuning experiment.
+The RBF kernel allows the SVM to model nonlinear relationships between the extracted image features.
 
 ---
 
-## Dataset Split
+## 📊 Dataset Split
 
-For the current development experiment:
+To keep the training process computationally manageable, **8,000 images** were selected from the available valid images.
 
-```text
-Total selected images: 8,000
-Training images: 6,400
-Testing images: 1,600
-```
-
-The dataset is split using:
+The data was split using an 80/20 train-test split.
 
 ```text
-80% Training
-20% Testing
+Total images used : 8,000
+
+Training samples  : 6,400
+Testing samples   : 1,600
 ```
 
-Stratified splitting is used to preserve the Cat/Dog class distribution.
+Stratified splitting was used to maintain the class distribution between training and testing sets.
 
 ---
 
-## Hyperparameter Tuning
+## ⚙️ Hyperparameter Tuning
 
-The project experiments with different SVM `C` values:
+The SVM parameter `C` was evaluated using three different values:
 
 ```text
 C = 1
@@ -169,43 +189,87 @@ C = 10
 C = 100
 ```
 
-The configuration producing the highest measured validation accuracy is selected for the final model.
+The results were:
+
+| C Value |   Accuracy |
+| ------: | ---------: |
+|       1 |     73.75% |
+|  **10** | **74.75%** |
+|     100 |     74.75% |
+
+The final configuration uses:
+
+```text
+C = 10
+```
+
+Both `C=10` and `C=100` achieved the same measured accuracy on the evaluation split, so `C=10` was selected as the final configuration.
 
 ---
 
-## Model Evaluation
+## 📈 Model Performance
 
-The classifier is evaluated using:
+The final SVM model achieved:
 
-* Accuracy
-* Precision
-* Recall
-* F1-score
-* Confusion Matrix
-
-The evaluation results are stored in:
+### Accuracy
 
 ```text
-results/metrics.txt
+74.75%
+```
+
+Evaluation was performed on:
+
+```text
+1,600 test images
+```
+
+### Classification Report
+
+```text
+              precision    recall  f1-score   support
+
+Cat              0.73      0.78      0.75       800
+Dog              0.76      0.72      0.74       800
+
+accuracy                             0.75      1600
+macro avg         0.75      0.75      0.75      1600
+weighted avg      0.75      0.75      0.75      1600
+```
+
+---
+
+## 🔢 Confusion Matrix
+
+The resulting confusion matrix is:
+
+```text
+[[621 179]
+ [225 575]]
+```
+
+Interpreted as:
+
+| Actual | Predicted Cat | Predicted Dog |
+| ------ | ------------: | ------------: |
+| Cat    |           621 |           179 |
+| Dog    |           225 |           575 |
+
+Therefore:
+
+* **621 cats** were correctly classified.
+* **179 cats** were classified as dogs.
+* **575 dogs** were correctly classified.
+* **225 dogs** were classified as cats.
+
+The confusion matrix visualization is saved as:
+
+```text
 results/confusion_matrix.png
 ```
 
-### Final Performance
-
-Update this section with the actual results from your final evaluation.
-
-```text
-Accuracy: XX.XX%
-Precision: XX.XX%
-Recall: XX.XX%
-F1-score: XX.XX%
-```
-
-> Performance values should be updated after the final experiment and should reflect the actual measured results.
-
 ---
 
-## Project Structure
+## 📁 Project Structure
 
 ```text
 svm_classifier/
@@ -216,10 +280,13 @@ svm_classifier/
 │       └── Dog/
 │
 ├── models/
+│   ├── .gitkeep
 │   ├── svm_cat_dog_model.pkl
 │   └── test_data.pkl
 │
 ├── notebooks/
+│   ├── .gitkeep
+│   └── 01_exploratory_data_analysis.ipynb
 │
 ├── results/
 │   ├── confusion_matrix.png
@@ -233,15 +300,29 @@ svm_classifier/
 │   └── tune_svm.py
 │
 ├── .gitignore
-├── requirements.txt
-└── README.md
+├── README.md
+└── requirements.txt
 ```
+
+> The dataset and trained `.pkl` model files are excluded from GitHub using `.gitignore` to avoid uploading large files.
 
 ---
 
-## Installation
+## 🚀 Installation
 
-Clone the repository and create a virtual environment:
+Clone the repository:
+
+```bash
+git clone https://github.com/YOUR_USERNAME/PRODIGY_ML_03.git
+```
+
+Move into the project directory:
+
+```bash
+cd PRODIGY_ML_03
+```
+
+Create a virtual environment:
 
 ```bash
 python -m venv venv
@@ -253,7 +334,7 @@ Activate the virtual environment on Windows:
 venv\Scripts\activate
 ```
 
-Install the required packages:
+Install the dependencies:
 
 ```bash
 pip install -r requirements.txt
@@ -261,15 +342,45 @@ pip install -r requirements.txt
 
 ---
 
-## Training the Model
+## 📥 Dataset Setup
 
-Run:
+Download and extract the Cats and Dogs dataset.
 
-```bash
-python src/train.py
+Place the extracted images in:
+
+```text
+data/PetImages/
 ```
 
-The trained SVM model will be saved as:
+The directory should contain:
+
+```text
+data/PetImages/Cat/
+data/PetImages/Dog/
+```
+
+---
+
+## ▶️ Training the Model
+
+From the project root:
+
+```powershell
+python src\train.py
+```
+
+The training script:
+
+1. Loads the images.
+2. Extracts HOG features.
+3. Selects the required number of samples.
+4. Splits the data into training and testing sets.
+5. Trains the SVM.
+6. Calculates validation accuracy.
+7. Saves the trained model.
+8. Saves the test data.
+
+The trained model is saved as:
 
 ```text
 models/svm_cat_dog_model.pkl
@@ -277,90 +388,201 @@ models/svm_cat_dog_model.pkl
 
 ---
 
-## Evaluating the Model
+## 🔧 Hyperparameter Tuning
+
+To compare different values of `C`:
+
+```powershell
+python src\tune_svm.py
+```
+
+The current experiment compares:
+
+```text
+C = 1
+C = 10
+C = 100
+```
+
+---
+
+## 📊 Model Evaluation
 
 Run:
 
-```bash
-python src/evaluate.py
+```powershell
+python src\evaluate.py
 ```
 
 This generates:
 
 ```text
-results/metrics.txt
 results/confusion_matrix.png
+results/metrics.txt
 ```
+
+The evaluation script calculates:
+
+* Accuracy
+* Precision
+* Recall
+* F1-score
+* Confusion matrix
 
 ---
 
-## Hyperparameter Tuning
+## 🔮 Predict a New Image
+
+The project also includes a prediction script.
 
 Run:
 
-```bash
-python src/tune_svm.py
+```powershell
+python src\predict.py ".\data\PetImages\Cat\0.jpg"
 ```
 
-The script compares different values of the SVM `C` parameter.
+or:
 
----
-
-## Making Predictions
-
-The trained model can be used to classify a new image.
-
-Example:
-
-```bash
-python src/predict.py "path/to/image.jpg"
+```powershell
+python src\predict.py ".\data\PetImages\Dog\0.jpg"
 ```
+
+The image goes through the same preprocessing and HOG feature extraction pipeline before being passed to the trained SVM model.
 
 Example output:
 
 ```text
-==============================
-PREDICTION
-==============================
+Predicted class: Cat
+```
 
-Predicted Class: Cat
+or:
+
+```text
+Predicted class: Dog
 ```
 
 ---
 
-## Key Learning Outcomes
+## 📓 Exploratory Data Analysis
 
-Through this project, the following concepts were implemented:
+The project includes a Jupyter notebook:
 
-* Image preprocessing
-* Grayscale image conversion
-* Image resizing
+```text
+notebooks/01_exploratory_data_analysis.ipynb
+```
+
+The notebook contains:
+
+* Dataset exploration
+* Class distribution
+* Sample image visualization
+* Image preprocessing demonstration
 * HOG feature extraction
-* Feature representation for machine learning
-* Support Vector Machines
-* RBF kernel
-* Hyperparameter tuning
-* Train-test splitting
-* Binary image classification
-* Model evaluation
-* Confusion matrix visualization
-* Model serialization using Joblib
-* Command-line image prediction
+* Feature shape analysis
+* Model evaluation overview
+
+Launch Jupyter Notebook using:
+
+```powershell
+jupyter notebook
+```
 
 ---
 
-## Future Improvements
+## 📋 Results Summary
+
+| Configuration       | Value         |
+| ------------------- | ------------- |
+| Dataset             | Cats and Dogs |
+| Valid images loaded | 24,998        |
+| Images used         | 8,000         |
+| Training samples    | 6,400         |
+| Testing samples     | 1,600         |
+| Image size          | 64 × 64       |
+| Image type          | Grayscale     |
+| Feature extraction  | HOG           |
+| HOG feature count   | 1,764         |
+| SVM kernel          | RBF           |
+| C                   | 10            |
+| Gamma               | scale         |
+| Test accuracy       | **74.75%**    |
+
+---
+
+## ⚠️ Limitations
+
+The current implementation achieves **74.75% accuracy** on the selected evaluation split.
+
+Some limitations include:
+
+* Only 8,000 images were used for training to keep computation manageable.
+* HOG features primarily capture shape and edge information.
+* HOG does not capture high-level semantic information as effectively as modern deep learning models.
+* The model may have difficulty with images containing unusual poses, backgrounds, lighting conditions, or occlusions.
+* The current model uses a traditional machine learning approach rather than a convolutional neural network.
+
+---
+
+## 🔮 Future Improvements
 
 Possible improvements include:
 
-* Training on a larger portion of the dataset
-* Comparing Linear SVM and RBF SVM
-* Experimenting with different image sizes
-* Additional HOG configurations
-* Cross-validation
-* Feature scaling and dimensionality reduction
-* Comparing SVM with CNN-based approaches
-* Building a simple web interface for image prediction
+* Train on a larger portion of the dataset.
+* Experiment with additional SVM kernels.
+* Perform more extensive hyperparameter tuning.
+* Experiment with different HOG configurations.
+* Apply data augmentation.
+* Compare HOG + SVM with CNN-based models.
+* Use transfer learning with pretrained models such as ResNet or MobileNet.
+* Build a simple web interface for real-time image prediction.
+* Deploy the model using Flask, FastAPI, or Streamlit.
 
+---
 
+## 💡 Key Learning Outcomes
+
+Through this project, I gained practical experience in:
+
+* Image preprocessing
+* Grayscale image conversion
+* Feature extraction using HOG
+* Support Vector Machines
+* RBF kernels
+* Hyperparameter tuning
+* Train-test splitting
+* Classification metrics
+* Confusion matrix analysis
+* Model serialization using Joblib
+* Building a reusable ML project structure
+* Git and GitHub version control
+
+---
+
+## 🏆 Final Result
+
+The final HOG-based SVM classifier achieved:
+
+```text
+74.75% test accuracy
+```
+
+using:
+
+```text
+64 × 64 grayscale images
+        ↓
+HOG feature extraction
+        ↓
+1,764 features
+        ↓
+RBF SVM
+        ↓
+C = 10
+        ↓
+74.75% accuracy
+```
+
+This project demonstrates a complete traditional computer-vision and machine-learning pipeline for binary image classification.
+
+---
 

@@ -1,0 +1,26 @@
+SVM Cat vs Dog Image Classification
+=========================
+
+Testing Samples:1600
+Image Size: 32x32
+Image Type: Grayscale
+Features: 1024
+Kernel: RBF
+C: 10
+Gamma: scale
+
+Accuracy: 0.7475Accuracy Percentage: 74.75%
+
+Classification Report:
+              precision    recall  f1-score   support
+
+         Cat       0.73      0.78      0.75       800
+         Dog       0.76      0.72      0.74       800
+
+    accuracy                           0.75      1600
+   macro avg       0.75      0.75      0.75      1600
+weighted avg       0.75      0.75      0.75      1600
+
+Confusion Matrix:
+[[621 179]
+ [225 575]]
